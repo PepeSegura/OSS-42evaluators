@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+<h1> {{ login }} 's Projects </h1>
+{% csrf_token %}
+
+<div class="table-wrapper">
+<table class="table table-striped table-bordered table-dark">
+<thead>
+	<tr class="text-center">
+		<th>Pos</th><th>Name</th><th>Final mark</th><th>Status</th><th>Marked at</th><th>Login</th>
+	</tr>
+</thead>
+
+<tbody>
+{% for project in projects %}
+  <tr>
+	  <td> {{ forloop.counter|add:offset }} </td>
+	  <td> <a href="https://projects.intra.42.fr/projects/{{ project.slug }}/projects_users/{{ project.project_id }}" target="_blank"> {{ project.name }} </a> </td>
+	  <td> {{ project.final_mark }} </td>
+	  <td> {{ project.status }} </td>
+	  <td>
+		  {{ project.marked_at|date:"d-m-Y H:i:s" }}
+	  </td>
+	  <td> <a href="https://profile.intra.42.fr/users/{{ project.user.login }}" target="_blank"> {{ project.user.login }} </a>  </td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<div class="pagination justify-content-center">
+    <ul class="pagination">
+        {% if projects.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1&user={{ login }}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ projects.previous_page_number }}&user={{ login }}">Previous</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">First</span></li>
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+        {% endif %}
+        
+        {% for num in projects.paginator.page_range %}
+            {% if projects.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > projects.number|add:'-3' and num < projects.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}&user={{ login }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if projects.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ projects.next_page_number }}&user={{ login }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ projects.paginator.num_pages }}&user={{ login }}">Last</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            <li class="page-item disabled"><span class="page-link">Last</span></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %}

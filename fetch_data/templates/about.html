@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>About Page!</h1>
+    <div class="mt-4">
+        <p>Made with ♥️ by <a href="https://github.com/PepeSegura" target="_blank" class="plain-link">psegura-</a> and <a href="https://github.com/samuelcordero" target="_blank" class="plain-link">sacorder</a>. Work in progress.</p>
+        <p>Please, report bugs via <a href="slack://user?team=T039P7U66&id=U03KRFSKPS5" class="plain-link">Slack</a>!</p>
+    </div>
+</div>
+<div class="container mt-5">
+    <h2>Useful links!</h2>
+    <div class="mt-4">
+        <ul>
+            {% for link in useful_links %}
+            <li>
+                <p>
+                    <a href="{{ link.url }}" target="_blank" class="plain-link">{{ link.name }}</a>
+                </p>
+		<div class="highlight">
+		<p>{{ link.description|linebreaksbr }}</p>
+                <p>Creator: <a href="{{ link.link_creator }}" target="_blank" class="plain-link">{{ link.creator }}</a></p>
+		</div>
+            </li>
+            {% empty %}
+            <li>No useful links available.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+

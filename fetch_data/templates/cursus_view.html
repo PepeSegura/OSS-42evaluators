@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+<h1> {{ login }} 's Cursus </h1>
+{% csrf_token %}
+
+<div class="table-wrapper">
+<table class="table table-striped table-bordered table-dark">
+<thead>
+	<tr>
+		<th>Cursus</th><th>Level</th><th>Started</th><th>Blackhole</th>
+	</tr>
+</thead>
+
+<tbody>
+{% for cursu in cursus %}
+  <tr>
+	<td> {{ cursu.name }} </td>
+	<td> {{ cursu.level }} </td>
+	<td> {{ cursu.begin_at|date:"d-m-Y H:i:s" }} </td>
+	<td> 
+		{{ cursu.blackholed_at|date:"d-m-Y H:i:s" }} 
+		{{ cursu.blackholed_at|timefilter }}
+	</td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<div class="pagination justify-content-center">
+    <ul class="pagination">
+        {% if cursus.has_previous %}
+            <li class="page-item">
+		    <a class="page-link" href="?page=1&user={{ login }}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ cursus.previous_page_number }}&user={{ login }}">Previous</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">First</span></li>
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+        {% endif %}
+        
+        {% for num in cursus.paginator.page_range %}
+            {% if cursus.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > cursus.number|add:'-3' and num < cursus.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}&user={{ login }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if cursus.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ cursus.next_page_number }}&user={{ login }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ cursus.paginator.num_pages }}&user={{ login }}">Last</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            <li class="page-item disabled"><span class="page-link">Last</span></li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

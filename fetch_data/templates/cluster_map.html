@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+     	<style>
+        .progress {
+            height: auto; /* Allow the progress container to adjust its height */
+        }
+        .progress-bar {
+            display: flex;
+            align-items: center; /* Center content vertically */
+            height: 100%; /* Inherit height from the parent progress container */
+        }
+	</style>
+</head>
+<h1> {{ title }} </h1>
+{% csrf_token %}
+<div class="horizontal-container">
+<div class="table-wrapper">
+    <h2>Cluster 1:  {{ occupancy.0 }}/102  {% widthratio occupancy.0 102 100 %}%</h2>
+    <!--
+    <div class="progress">
+    	<div class="progress-bar progress-bar-striped progress-bar-animated"
+		role="progressbar"
+		style="width: {% widthratio occupancy.0 102 100 %}%;"
+		aria-valuenow="{% widthratio occupancy.0 102 100 %}"
+		aria-valuemin="0" aria-valuemax="102">
+		<h2>
+		C1: {{ occupancy.0 }}/102 {% widthratio occupancy.0 102 100 %}%
+		</h2>
+        </div>
+    </div>
+    -->
+<table class="table table-striped table-bordered table-dark">
+<thead>
+<tr class="text-center">
+	    <th class="sticky-col">Row</th>
+            <th>s1</th>
+            <th>s2</th>
+            <th>s3</th>
+            <th>s4</th>
+	    <th>s5</th>
+	    <th>s6</th>
+</tr>
+</thead>
+
+<tbody>
+    {% for row in rowsc1 %}
+        <tr>
+        <td class="sticky-col">{{ row.row_label }}</td>
+	{% include "_image_cell.html" with item=row.s1 %}
+        {% include "_image_cell.html" with item=row.s2 %}
+        {% include "_image_cell.html" with item=row.s3 %}
+        {% include "_image_cell.html" with item=row.s4 %}
+        {% include "_image_cell.html" with item=row.s5 %}
+        {% include "_image_cell.html" with item=row.s6 %}
+        </tr>
+    {% endfor %}        
+</tbody>
+</table>
+</div>
+
+<div class="table-wrapper">
+    <h2>Cluster 2:  {{ occupancy.1 }}/114  {% widthratio occupancy.1 114 100 %}%</h2>
+    <!--
+    <div class="progress">
+    	<div class="progress-bar progress-bar-striped progress-bar-animated"
+		role="progressbar"
+		style="width: {% widthratio occupancy.1 114 100 %}%;"
+		aria-valuenow="{% widthratio occupancy.1 114 100 %}"
+		aria-valuemin="0" aria-valuemax="114">
+		<h2>
+		C2: {{ occupancy.1 }}/114 {% widthratio occupancy.1 114 100 %}%
+		</h2>
+        </div>
+    </div>
+    -->
+<table class="table table-striped table-bordered table-dark">
+<thead>
+<tr class="text-center">
+	    <th class="sticky-col">Row</th>
+            <th>s1</th>
+            <th>s2</th>
+            <th>s3</th>
+            <th>s4</th>
+	    <th>s5</th>
+	    <th>s6</th>
+</tr>
+</thead>
+
+<tbody>
+    {% for row in rowsc2 %}
+        <tr>
+        <td class="sticky-col">{{ row.row_label }}</td>
+	{% include "_image_cell.html" with item=row.s1 %}
+        {% include "_image_cell.html" with item=row.s2 %}
+        {% include "_image_cell.html" with item=row.s3 %}
+        {% include "_image_cell.html" with item=row.s4 %}
+        {% include "_image_cell.html" with item=row.s5 %}
+        {% include "_image_cell.html" with item=row.s6 %}
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+
+<div class="table-wrapper">
+    <h2>Cluster 3:  {{ occupancy.2 }}/84  {% widthratio occupancy.2 84 100 %}%</h2>
+    <!--
+    <div class="progress">
+    	<div class="progress-bar progress-bar-striped progress-bar-animated"
+		role="progressbar"
+		style="width: {% widthratio occupancy.2 84 100 %}%;"
+		aria-valuenow="{% widthratio occupancy.2 84 100 %}"
+		aria-valuemin="0" aria-valuemax="84">
+		<h2>
+		C3: {{ occupancy.2 }}/84 {% widthratio occupancy.1 84 100 %}%
+		</h2>
+        </div>
+    </div>
+    -->
+<table class="table table-striped table-bordered table-dark">
+<thead>
+<tr class="text-center">
+	    <th class="sticky-col">Row</th>
+            <th>s1</th>
+            <th>s2</th>
+            <th>s3</th>
+            <th>s4</th>
+	    <th>s5</th>
+	    <th>s6</th>
+</tr>
+</thead>
+
+<tbody>
+    {% for row in rowsc3 %}
+        <tr>
+        <td class="sticky-col">{{ row.row_label }}</td>
+	{% include "_image_cell.html" with item=row.s1 %}
+        {% include "_image_cell.html" with item=row.s2 %}
+        {% include "_image_cell.html" with item=row.s3 %}
+        {% include "_image_cell.html" with item=row.s4 %}
+        {% include "_image_cell.html" with item=row.s5 %}
+        {% include "_image_cell.html" with item=row.s6 %}
+        </tr>
+    {% endfor %}        
+</tbody>
+</table>
+</div>
+</div>
+
+<style>
+.horizontal-container {
+    display: flex; /* Use flexbox for horizontal distribution */
+    justify-content: space-between; /* Space between each table */
+    flex-wrap: wrap; /* Allow wrapping to next line */
+}
+
+.table-wrapper {
+    width: 33%; /* Set the width of each table wrapper as needed */
+    height: auto;
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+}
+
+.image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* To position the aura effect correctly */
+    width: 36px; /* Match image size */
+    height: 36px; /* Match image size */
+    margin: auto; /* Center the image inside the table cell */
+}
+
+.fixed-image {
+    width: 36px; /* Set the width as desired */
+    height: 36px; /* Maintain aspect ratio */
+    object-fit: cover;
+    border-radius: 50%;
+    position: relative; /* Ensure the image is on top of the aura */
+    z-index: 1;
+}
+
+/* Aura effect for favorite users */
+.image-wrapper.favorite::before {
+    content: '';
+    position: absolute;
+    top: -2px; /* Make the aura larger than the image */
+    left: -2px; /* Make the aura larger than the image */
+    width: 40px; /* Make the aura larger than the image */
+    height: 40px; /* Make the aura larger than the image */
+    border-radius: 50%;
+    background: rgba(28, 196, 79, 1);
+    z-index: 0;
+}
+
+/* Aura effect for users who have favorited */
+.image-wrapper.favorited_by::before {
+    content: '';
+    position: absolute;
+    top: -2px; /* Make the aura larger than the image */
+    left: -2px; /* Make the aura larger than the image */
+    width: 40px; /* Make the aura larger than the image */
+    height: 40px; /* Make the aura larger than the image */
+    border-radius: 50%;
+    background: rgba(12, 237, 215, 1);
+    z-index: 0;
+}
+
+.image-wrapper.dev {
+    position: relative; /* Ensure the pseudo-element is positioned correctly */
+}
+
+/* Aura effect for developers */
+.image-wrapper.dev::before {
+    content: '';
+    position: absolute;
+    top: auto; /* Make the aura larger than the image */
+    left: auto; /* Make the aura larger than the image */
+    width: 46px; /* Make the aura larger than the image */
+    height: 46px; /* Make the aura larger than the image */
+    /* border-radius: 50%;
+    background: rgba(255, 191, 0, 1); */
+    /* Aura */
+    background-image: url("{% static 'images/yoru_aura_discord.png' %}"); /* Update this path */
+    background-size: cover;
+    background-position: center;
+    /* End Aura */
+    z-index: 0;
+}
+
+/* Aura effect for owners */
+.image-wrapper.owner::before {
+    content: '';
+    position: absolute;
+    top: -2px; /* Make the aura larger than the image */
+    left: -2px; /* Make the aura larger than the image */
+    width: 40px; /* Make the aura larger than the image */
+    height: 40px; /* Make the aura larger than the image */
+    border-radius: 50%;
+    background: rgba(243, 180, 85, 1);
+    z-index: 0;
+}
+td {
+    border: 1px solid #000;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    width: 53px; /* Set the width as desired */
+    height: 53px; /* Set a fixed height for table cells */
+    vertical-align: middle; /* Vertically align text and images */
+}
+
+.sticky-col {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    left: 0;
+    background-color: #343a40; /* Match the table background color */
+    z-index: 2; /* Ensure it is above other cells */
+}
+
+.sticky-col + td {
+    z-index: 1; /* Ensure the next cells are below the sticky column */
+}
+
+th.sticky-col {
+    z-index: 3; /* Ensure header cells are above all other cells */
+    width: 53px; /* Set the width as desired */
+    height: 53px; /* Ensure header cells have the same height */
+    vertical-align: middle; /* Vertically align text */
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .table-wrapper {
+        width: 100%; /* Full width for mobile devices */
+        margin-bottom: 20px; /* Space between tables */
+    }
+}
+
+</style>
+
+<script>
+    // Reload the page every 120 seconds (2 minutes)
+    setInterval(function () {
+        location.reload();
+    }, 120000);
+</script>
+
+<div class="container mt-5">
+  <h2 class="text-center">Occupancy Graph</h2>
+      <canvas id="occupancyChart"></canvas>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('occupancyChart').getContext('2d');
+    
+    const maxValues = [102, 114, 84];
+    const usedValues = [{{ occupancy.0 }}, {{ occupancy.1 }}, {{ occupancy.2 }}];
+    const labels = ['Cluster 1', 'Cluster 2', 'Cluster 3'];
+    
+    const percentages = usedValues.map((value, index) => (value / maxValues[index]) * 100);
+    
+    function interpolateColor(percent) {
+      const startColor = [54, 162, 235];
+      const endColor = [255, 0, 0];
+
+      const r = Math.round(startColor[0] + percent * (endColor[0] - startColor[0]) / 100);
+      const g = Math.round(startColor[1] + percent * (endColor[1] - startColor[1]) / 100);
+      const b = Math.round(startColor[2] + percent * (endColor[2] - startColor[2]) / 100);
+
+      return `rgba(${r}, ${g}, ${b}, 0.2)`;
+    }
+
+    const colors = percentages.map(percent => interpolateColor(percent));
+
+    const occupancyChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Occupancy (%)',
+          data: percentages,
+          backgroundColor: colors,
+          borderColor: colors.map(color => color.replace('0.2', '1')),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return value + '%';
+              }
+            },
+            title: {
+              display: true,
+              text: 'Percentage'
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const index = context.dataIndex;
+                return `Used: ${usedValues[index]} / ${maxValues[index]} (${context.raw.toFixed(2)}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
+
+{% endblock content %}
+

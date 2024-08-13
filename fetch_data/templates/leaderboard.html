@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="text-center">Students@42Madrid</h1>
+
+<style>
+.w-100 {
+    width: 100%;
+}
+</style>
+
+<div class="container mb-3">
+    <div class="row">
+        <!-- Search Form -->
+        <div class="col-md-6 d-flex">
+            <form method="GET" action="{% url 'index' %}" class="form-inline w-100">
+                <div class="form-group flex-grow-1 mr-2">
+                    <input type="text" name="search" class="form-control w-100" placeholder="Search by login..." value="{{ search_query }}">
+                    <!-- Include the piscine filter in a hidden input field if selected -->
+                    {% if selected_piscine %}
+                        <input type="hidden" name="piscine" value="{{ selected_piscine.id }}">
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        
+        <!-- Piscine Selection Dropdown -->
+        <div class="col-md-6 d-flex">
+            <form method="GET" action="{% url 'index' %}" class="form-inline w-100">
+                <div class="btn-group w-100">
+                    <button type="button" class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if selected_piscine %}
+                            {{ selected_piscine }} ({{ selected_piscine.user_count }})
+                        {% else %}
+                            All Piscines
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item {% if not selected_piscine %}active{% endif %}" href="?piscine=&search={{ search_query }}">
+                                All Piscines
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% for piscine in piscines %}
+                            <li>
+                                <a class="dropdown-item {% if selected_piscine and selected_piscine.id == piscine.id %}active{% endif %}" href="?piscine={{ piscine.id }}&search={{ search_query }}">
+                                    {{ piscine }} ({{ piscine.user_count }})
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="table-wrapper">
+    <table class="table table-striped table-bordered table-dark">
+        <thead>
+            <tr class="text-center">
+                <th>Pos</th>
+                <th>
+                    <a href="?sort_by={{ sort_dir }}login{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                        <button type="button" class="btn btn-dark">Login</button>
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by={{ sort_dir }}cursus_21_level{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                        <button type="button" class="btn btn-dark">Cursus Level</button>
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by={{ sort_dir }}cursus_9_level{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                        <button type="button" class="btn btn-dark">Piscine Level</button>
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by={{ sort_dir }}evaluation_points{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                        <button type="button" class="btn btn-dark">Points</button>
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort_by={{ sort_dir }}wallet{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                        <button type="button" class="btn btn-dark">Wallet</button>
+                    </a>
+                </th>
+                <th>User Projects</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter|add:offset }}</td>
+                    <td><a href="https://profile.intra.42.fr/users/{{ user.login }}" target="_blank">{{ user.login }}</a></td>
+                    <td>{{ user.cursus_21_level|floatformat:2 }}</td>
+                    <td>{{ user.cursus_9_level|floatformat:2 }}</td>
+                    <td>{{ user.evaluation_points }}</td>
+                    <td>{{ user.wallet }}</td>
+                    <td><a href="{% url 'Projects' %}?user={{ user.login }}">Projects</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<div class="pagination justify-content-center">
+    <ul class="pagination">
+        {% if users.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ users.previous_page_number }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">Previous</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">First</span></li>
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+        {% endif %}
+
+        {% for num in users.paginator.page_range %}
+            {% if users.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > users.number|add:'-3' and num < users.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if users.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ users.next_page_number }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ users.paginator.num_pages }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">Last</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            <li class="page-item disabled"><span class="page-link">Last</span></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %}
+

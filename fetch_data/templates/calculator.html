@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5">
+<h1>{{ title }}!</h1>
+    <div class="mt-4">
+        <p>Made with ♥️ by <a href="https://github.com/PepeSegura" target="_blank" class="plain-link">psegura-</a> and <a href="https://github.com/samuelcordero" target="_blank" class="plain-link">sacorder</a>. Work in progress.</p>
+        <p>Please, report bugs via <a href="slack://user?team=T039P7U66&id=U03KRFSKPS5" class="plain-link">Slack</a>!</p>
+    </div>
+</div>
+<div class="container mt-5">
+    <h2>Projects!</h2>
+    <h3>Starting level: {{ owner_cursus.level }}</h3>
+    <div class="mt-4">
+        <ul>
+            {% for project in owner_projects %}
+            <li>
+                <p>
+		    {{ project.name }} {{ project.final_mark }}
+            </li>
+            {% empty %}
+            <li>No projects found for this user.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+

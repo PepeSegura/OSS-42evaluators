@@ -1,0 +1,23 @@
+{# templates/_image_cell.html #}
+{% if item %}
+    <td class="table-cell
+        {% if item.is_dev %}dev
+        {% elif item.is_owner %}owner
+        {% elif item.is_favorite %}favorite
+        {% elif item.is_favorited_by %}favorited_by
+        {% endif %}">
+        <div class="image-wrapper
+            {% if item.is_dev %}dev
+	    {% elif item.is_owner %}owner
+            {% elif item.is_favorite %}favorite
+            {% elif item.is_favorited_by %}favorited_by
+            {% endif %}">
+            <a href="{{ item.profile_url }}" target="_blank">
+                <img src="{{ item.image }}" alt="Image" class="fixed-image">
+            </a>
+        </div>
+    </td>
+{% else %}
+    <td class="table-cell"></td>
+{% endif %}
+
