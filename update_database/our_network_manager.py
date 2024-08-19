@@ -17,9 +17,11 @@ from fetch_data.models import CursusProject
 # End Import models
 
 # Load environment variables from .env file
-load_dotenv(".env")
-API_URL = os.getenv("API_URL")
-auth_server_url = os.getenv("AUTH_SERVER")
+# load_dotenv(".env")
+# API_URL = os.getenv("API_URL")
+# auth_server_url = os.getenv("AUTH_SERVER")
+API_URL = "https://api.intra.42.fr/v2"
+auth_server_url='https://api.intra.42.fr/v2/oauth/token'
 
 tokens = []  # Initialize an empty list to store the tokens
 
