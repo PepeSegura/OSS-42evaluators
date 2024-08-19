@@ -4,6 +4,7 @@ import sys, random, string, requests, time, threading
 from queue import Queue
 
 from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
@@ -139,3 +140,7 @@ def check_login_status(request):
 
     return JsonResponse({'status': 'pending'})
 
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')  # Redirect to the homepage or any other page after logout
