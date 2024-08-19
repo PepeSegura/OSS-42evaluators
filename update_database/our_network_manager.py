@@ -85,7 +85,7 @@ def chooseToken():
     if tokens:
         chosen_token = tokens.pop(0)  # Remove and return the first token
         tokens.append(chosen_token) # Add the removed token to the end
-        if chosen_token.name == '42LEADERBOARD':
+        if chosen_token.name == '1_LOGIN':
             chosen_token = tokens.pop(0)  # Remove and return the first token
             tokens.append(chosen_token) # Add the removed token to the end
         if needToUpdate(chosen_token):

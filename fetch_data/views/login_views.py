@@ -63,7 +63,7 @@ def login_42(request):
     if request.user.is_authenticated:
         return redirect('index')
 
-    client_id = Key.objects.filter(name='42LEADERBOARD').first().uid
+    client_id = Key.objects.filter(name='1_LOGIN').first().uid
     redirect_uri = 'http://127.0.0.1:8000/auth/callback'
     scope = 'public'
     state = generate_state()
@@ -94,10 +94,10 @@ def auth_callback(request):
         return HttpResponseBadRequest('Invalid state parameter')
 
     token_url = 'https://api.intra.42.fr/oauth/token'
-    client_id = Key.objects.filter(name='42LEADERBOARD').first().uid
-    client_secret = Key.objects.filter(name='42LEADERBOARD').first().secret
+    client_id = Key.objects.filter(name='1_LOGIN').first().uid
+    client_secret = Key.objects.filter(name='1_LOGIN').first().secret
     # Check and update token info if needed
-    leaderboard_token = Key.objects.filter(name='42LEADERBOARD').first()
+    leaderboard_token = Key.objects.filter(name='1_LOGIN').first()
     if needToUpdate(leaderboard_token):
         updateTokenInfo(leaderboard_token, client_id, client_secret)
     redirect_uri = 'http://127.0.0.1:8000/auth/callback'

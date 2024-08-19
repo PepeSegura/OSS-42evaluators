@@ -67,21 +67,33 @@ http://127.0.0.1:8000/admin/
 Log in with the superuser credentials you created earlier.
 
 ## 8. Populate the Database
+
 Once the server is running, you'll see the website, but it won't have any users. To populate the database, log into the admin panel and add 2 keys into the key database.
 
-To obtain the necessary UID and SECRET, you need to register a new application at [42 Intra OAuth Applications](https://profile.intra.42.fr/oauth/applications). After registering, you'll receive a UID and SECRET for your application.
+To obtain the necessary `UID` and `SECRET`, you need to register a new application at [42 Intra OAuth Applications](https://profile.intra.42.fr/oauth/applications). After registering, you'll receive a UID and SECRET for your application.
 
-They can be the same, but one of them needs to be called LOGIN.
+They can be the same, but one of them needs to be called `1_LOGIN`.
 
-- Key 1:
-  - Name: LOGIN
-  - UID: uid1
-  - SECRET: secret1
+- **Key 1:**
+  - **Name:** 1_LOGIN
+  - **UID:** `Your UID from the 42 Intra`
+  - **SECRET:** `Your SECRET from the 42 Intra`
 
-- Key 2:
-  - Name: name
-  - UID: uid1
-  - SECRET: secret1
+- **Key 2:**
+  - **Name:** name
+  - **UID:** `Your UID from the 42 Intra`
+  - **SECRET:** `Your SECRET from the 42 Intra`
+
+After setting the keys, you need to populate the database by running the update script. Navigate to `update_database/schedule_update.py` and modify the `start()` function:
+
+- **For the first-time setup in development:**
+  - Set `updateDatabase` to 1 minute
+  - Set `updateLocations` to 5 minutes
+
+- **After you have some data in the database:**
+  - Set `updateDatabase` to 30 minutes (or disable it)
+  - Set `updateLocations` to 10 minutes (or disable it)
+
 
 ## 9. Restart the Server
 After the keys are set, quit the server by pressing CONTROL-C. Then, run the server again with:
