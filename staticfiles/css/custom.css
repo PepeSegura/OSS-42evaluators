@@ -1,0 +1,9 @@
+/* Dark Mode (default) */
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #e0e0e0;
+}

@@ -1,0 +1,21 @@
+/* Light Mode (default) */
+body {
+    background-color: #ffffff;
+    color: #000000;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Ensure that text is readable */
+.navbar-dark .navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+body.dark-mode .navbar-dark .navbar-nav .nav-link {
+    color: #e0e0e0;
+}
