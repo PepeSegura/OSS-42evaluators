@@ -7,13 +7,13 @@
 <table class="table table-striped table-bordered table-dark">
 <thead>
 <tr class="text-center">
-	    <th class="sticky-col">Row</th>
+            <th class="sticky-col">Row</th>
             <th>s1</th>
             <th>s2</th>
             <th>s3</th>
             <th>s4</th>
-	    <th>s5</th>
-	    <th>s6</th>
+            <th>s5</th>
+            <th>s6</th>
 </tr>
 </thead>
 
@@ -28,7 +28,7 @@
         {% include "clusters/_image_cell.html" with item=row.s5 %}
         {% include "clusters/_image_cell.html" with item=row.s6 %}
         </tr>
-    {% endfor %}        
+    {% endfor %}
 </tbody>
 </table>
 </div>
@@ -38,13 +38,13 @@
 <table class="table table-striped table-bordered table-dark">
 <thead>
 <tr class="text-center">
-	    <th class="sticky-col">Row</th>
+            <th class="sticky-col">Row</th>
             <th>s1</th>
             <th>s2</th>
             <th>s3</th>
             <th>s4</th>
-	    <th>s5</th>
-	    <th>s6</th>
+            <th>s5</th>
+            <th>s6</th>
 </tr>
 </thead>
 
@@ -52,7 +52,7 @@
     {% for row in rowsc2 %}
         <tr>
         <td class="sticky-col">{{ row.row_label }}</td>
-	{% include "clusters/_image_cell.html" with item=row.s1 %}
+        {% include "clusters/_image_cell.html" with item=row.s1 %}
         {% include "clusters/_image_cell.html" with item=row.s2 %}
         {% include "clusters/_image_cell.html" with item=row.s3 %}
         {% include "clusters/_image_cell.html" with item=row.s4 %}
@@ -69,13 +69,13 @@
 <table class="table table-striped table-bordered table-dark">
 <thead>
 <tr class="text-center">
-	    <th class="sticky-col">Row</th>
+            <th class="sticky-col">Row</th>
             <th>s1</th>
             <th>s2</th>
             <th>s3</th>
             <th>s4</th>
-	    <th>s5</th>
-	    <th>s6</th>
+            <th>s5</th>
+            <th>s6</th>
 </tr>
 </thead>
 
@@ -83,30 +83,51 @@
     {% for row in rowsc3 %}
         <tr>
         <td class="sticky-col">{{ row.row_label }}</td>
-	{% include "clusters/_image_cell.html" with item=row.s1 %}
+        {% include "clusters/_image_cell.html" with item=row.s1 %}
         {% include "clusters/_image_cell.html" with item=row.s2 %}
         {% include "clusters/_image_cell.html" with item=row.s3 %}
         {% include "clusters/_image_cell.html" with item=row.s4 %}
         {% include "clusters/_image_cell.html" with item=row.s5 %}
         {% include "clusters/_image_cell.html" with item=row.s6 %}
         </tr>
-    {% endfor %}        
+    {% endfor %}
 </tbody>
 </table>
 </div>
 </div>
 
+<div class="container mt-5">
+        <h2 class="text-center">Occupancy Graph</h2>
+        <canvas id="occupancyChart"></canvas>
+</div>
+
 <style>
 .horizontal-container {
-    display: flex; /* Use flexbox for horizontal distribution */
-    justify-content: space-between; /* Space between each table */
-    flex-wrap: wrap; /* Allow wrapping to next line */
+    display: grid; /* Use CSS Grid for layout */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Flexible columns */
+    gap: 20px; /* Space between tables */
+    width: 100%; /* Full width container */
 }
 
 .table-wrapper {
-    width: 33%; /* Set the width of each table wrapper as needed */
-    height: auto;
     box-sizing: border-box; /* Ensure padding and border are included in the width */
+    padding: 10px; /* Add some padding */
+    height: auto; /* Adjust height automatically */
+    min-width: 300px; /* Minimum width for table wrappers */
+}
+
+/* Ensure table styling is consistent */
+table {
+    width: 100%; /* Make tables take full width of their container */
+    table-layout: fixed; /* Make table layout fixed for better responsiveness */
+}
+
+td, th {
+    text-align: center; /* Center align text */
+    vertical-align: middle; /* Vertically center align content */
+    overflow: hidden; /* Hide overflow to maintain layout */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    white-space: nowrap; /* Prevent text from wrapping */
 }
 
 .image-wrapper {
@@ -127,6 +148,8 @@
     position: relative; /* Ensure the image is on top of the aura */
     z-index: 1;
 }
+
+/* Aura effects and other styles remain the same */
 
 /* Aura effect for favorite users */
 .image-wrapper.favorite::before {
@@ -154,10 +177,6 @@
     z-index: 0;
 }
 
-.image-wrapper.dev {
-    position: relative; /* Ensure the pseudo-element is positioned correctly */
-}
-
 /* Aura effect for developers */
 .image-wrapper.dev::before {
     content: '';
@@ -166,13 +185,9 @@
     left: auto; /* Make the aura larger than the image */
     width: 46px; /* Make the aura larger than the image */
     height: 46px; /* Make the aura larger than the image */
-    /* border-radius: 50%;
-    background: rgba(255, 191, 0, 1); */
-    /* Aura */
     background-image: url("{% static 'images/yoru_aura_discord.png' %}"); /* Update this path */
     background-size: cover;
     background-position: center;
-    /* End Aura */
     z-index: 0;
 }
 
@@ -188,6 +203,7 @@
     background: rgba(243, 180, 85, 1);
     z-index: 0;
 }
+
 td {
     border: 1px solid #45484b;
     padding: 0;
@@ -232,75 +248,4 @@ th.sticky-col {
     setInterval(function () {
         location.reload();
     }, 120000);
-</script>
-
-<div class="container mt-5">
-  <h2 class="text-center">Occupancy Graph</h2>
-      <canvas id="occupancyChart"></canvas>
-</div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('occupancyChart').getContext('2d');
-    
-    const maxValues = [102, 114, 84];
-    const usedValues = [{{ occupancy.0 }}, {{ occupancy.1 }}, {{ occupancy.2 }}];
-    const labels = ['Cluster 1', 'Cluster 2', 'Cluster 3'];
-    
-    const percentages = usedValues.map((value, index) => (value / maxValues[index]) * 100);
-    
-    function interpolateColor(percent) {
-      const startColor = [54, 162, 235];
-      const endColor = [255, 0, 0];
-
-      const r = Math.round(startColor[0] + percent * (endColor[0] - startColor[0]) / 100);
-      const g = Math.round(startColor[1] + percent * (endColor[1] - startColor[1]) / 100);
-      const b = Math.round(startColor[2] + percent * (endColor[2] - startColor[2]) / 100);
-
-      return `rgba(${r}, ${g}, ${b}, 0.2)`;
-    }
-
-    const colors = percentages.map(percent => interpolateColor(percent));
-
-    const occupancyChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Occupancy (%)',
-          data: percentages,
-          backgroundColor: colors,
-          borderColor: colors.map(color => color.replace('0.2', '1')),
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function(value) {
-                return value + '%';
-              }
-            },
-            title: {
-              display: true,
-              text: 'Percentage'
-            }
-          }
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const index = context.dataIndex;
-                return `Used: ${usedValues[index]} / ${maxValues[index]} (${context.raw.toFixed(2)}%)`;
-              }
-            }
-          }
-        }
-      }
-    });
-  });
 </script>
