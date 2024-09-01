@@ -10,7 +10,7 @@
     <div class="row">
         <!-- Search Form -->
         <div class="col-md-6 d-flex">
-            <form method="GET" action="{% url 'index' %}" class="form-inline w-100">
+            <form method="GET" hx-get="{% url 'index' %}" hx-target="#content-div" class="form-inline w-100">
                 <div class="form-group flex-grow-1 mr-2">
                     <input type="text" name="search" class="form-control w-100" placeholder="Search by login..." value="{{ search_query }}">
                     <!-- Include the piscine filter in a hidden input field if selected -->
@@ -20,35 +20,33 @@
                 </div>
             </form>
         </div>
-        
+
         <!-- Piscine Selection Dropdown -->
         <div class="col-md-6 d-flex">
-            <form method="GET" action="{% url 'index' %}" class="form-inline w-100">
-                <div class="btn-group w-100">
-                    <button type="button" class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if selected_piscine %}
-                            {{ selected_piscine }} ({{ selected_piscine.user_count }})
-                        {% else %}
+            <div class="btn-group w-100">
+                <button type="button" class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if selected_piscine %}
+                        {{ selected_piscine }} ({{ selected_piscine.user_count }})
+                    {% else %}
+                        All Piscines
+                    {% endif %}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item {% if not selected_piscine %}active{% endif %}" hx-get="?piscine=&search={{ search_query }}" hx-target="#content-div" hx-push-url="true">
                             All Piscines
-                        {% endif %}
-                    </button>
-                    <ul class="dropdown-menu">
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    {% for piscine in piscines %}
                         <li>
-                            <a class="dropdown-item {% if not selected_piscine %}active{% endif %}" href="?piscine=&search={{ search_query }}">
-                                All Piscines
+                            <a class="dropdown-item {% if selected_piscine and selected_piscine.id == piscine.id %}active{% endif %}" hx-get="?piscine={{ piscine.id }}&search={{ search_query }}" hx-target="#content-div" hx-push-url="true">
+                                {{ piscine }} ({{ piscine.user_count }})
                             </a>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
-                        {% for piscine in piscines %}
-                            <li>
-                                <a class="dropdown-item {% if selected_piscine and selected_piscine.id == piscine.id %}active{% endif %}" href="?piscine={{ piscine.id }}&search={{ search_query }}">
-                                    {{ piscine }} ({{ piscine.user_count }})
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </form>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -60,27 +58,27 @@
             <tr class="text-center">
                 <th>Pos</th>
                 <th>
-                    <a href="?sort_by={{ sort_dir }}login{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                    <a hx-get="?sort_by={{ sort_dir }}login{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">
                         <button type="button" class="btn btn-dark">Login</button>
                     </a>
                 </th>
                 <th>
-                    <a href="?sort_by={{ sort_dir }}cursus_21_level{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                    <a hx-get="?sort_by={{ sort_dir }}cursus_21_level{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">
                         <button type="button" class="btn btn-dark">Cursus Level</button>
                     </a>
                 </th>
                 <th>
-                    <a href="?sort_by={{ sort_dir }}cursus_9_level{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                    <a hx-get="?sort_by={{ sort_dir }}cursus_9_level{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">
                         <button type="button" class="btn btn-dark">Piscine Level</button>
                     </a>
                 </th>
                 <th>
-                    <a href="?sort_by={{ sort_dir }}evaluation_points{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                    <a hx-get="?sort_by={{ sort_dir }}evaluation_points{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">
                         <button type="button" class="btn btn-dark">Points</button>
                     </a>
                 </th>
                 <th>
-                    <a href="?sort_by={{ sort_dir }}wallet{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">
+                    <a hx-get="?sort_by={{ sort_dir }}wallet{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">
                         <button type="button" class="btn btn-dark">Wallet</button>
                     </a>
                 </th>
@@ -108,10 +106,10 @@
     <ul class="pagination">
         {% if users.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page=1&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">First</a>
+                <a class="page-link" href="" hx-get="?page=1&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">First</a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="?page={{ users.previous_page_number }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">Previous</a>
+                <a class="page-link" href="" hx-get="?page={{ users.previous_page_number }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">Previous</a>
             </li>
         {% else %}
             <li class="page-item disabled"><span class="page-link">First</span></li>
@@ -123,17 +121,17 @@
                 <li class="page-item active"><span class="page-link">{{ num }}</span></li>
             {% elif num > users.number|add:'-3' and num < users.number|add:'3' %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ num }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">{{ num }}</a>
+                    <a class="page-link" href="" hx-get="?page={{ num }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">{{ num }}</a>
                 </li>
             {% endif %}
         {% endfor %}
 
         {% if users.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ users.next_page_number }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">Next</a>
+                <a class="page-link" href="" hx-get="?page={{ users.next_page_number }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">Next</a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="?page={{ users.paginator.num_pages }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}">Last</a>
+                <a class="page-link" href="" hx-get="?page={{ users.paginator.num_pages }}&sort_by={{ sort_by }}&search={{ search_query }}{% if selected_piscine %}&piscine={{ selected_piscine.id }}{% endif %}" hx-target="#content-div" hx-push-url="true">Last</a>
             </li>
         {% else %}
             <li class="page-item disabled"><span class="page-link">Next</span></li>
@@ -141,3 +139,4 @@
         {% endif %}
     </ul>
 </div>
+
