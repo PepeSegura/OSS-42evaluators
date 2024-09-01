@@ -19,8 +19,8 @@ def start():
         updateLocations: 10 mins or disabled
     """
     scheduler = BackgroundScheduler()
-    scheduler.add_job(update_database.updateDatabase, 'interval', minutes=30)
-    scheduler.add_job(update_database.updateLocations, 'interval', minutes=10)
+    # scheduler.add_job(update_database.updateDatabase, 'interval', minutes=30)
+    # scheduler.add_job(update_database.updateLocations, 'interval', minutes=10)
 
     scheduler.start()
 

@@ -68,7 +68,7 @@ Log in with the superuser credentials you created earlier.
 
 ## 8. Populate the Database
 
-Once the server is running, you'll see the website, but it won't have any users. To populate the database, log into the admin panel and add 2 keys into the key database.
+Once the server is running, you'll see the fetch_data, but it won't have any users. To populate the database, log into the admin panel and add 2 keys into the key database.
 
 To obtain the necessary `UID` and `SECRET`, you need to register a new application at [42 Intra OAuth Applications](https://profile.intra.42.fr/oauth/applications). After registering, you'll receive a UID and SECRET for your application.
 
@@ -101,4 +101,4 @@ After the keys are set, quit the server by pressing CONTROL-C. Then, run the ser
 ```bash
 python manage.py runserver
 ```
-Now your setup should be complete, and the website should be fully functional with the populated database.
+Now your setup should be complete, and the fetch_data should be fully functional with the populated database.

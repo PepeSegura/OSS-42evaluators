@@ -1,6 +1,6 @@
 from .login_views import landing, login_42, auth_callback, check_login_status, logout_view
 from .others_views import about, calculator
-from .main_views import index, cursus, clusterMap, projects, allprojects, peers, leaderboard_view, add_friend
+from .main_views import index, cursus, cluster_view, projects, allprojects, peers, add_friend
 
 __all__ = [
     'landing',
@@ -12,7 +12,7 @@ __all__ = [
 
     'index',
     'cursus',
-    'clusterMap',
+    'cluster_view',
     'projects',
     'allprojects',
     'peers',
@@ -20,6 +20,4 @@ __all__ = [
 
     'about',
     'calculator',
-
-    leaderboard_view,
 ]

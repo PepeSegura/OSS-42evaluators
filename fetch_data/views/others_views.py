@@ -15,7 +15,10 @@ def about(request):
     context['title'] = 'About'
     useful_links = UsefulLink.objects.all()
     context['useful_links'] = useful_links
-    return render(request, 'about.html', context)
+    if 'HX-Request' in request.headers:
+        return render(request, 'about/about.html', context)
+    else:
+        return render(request, 'about/about_full.html', context)
 
 @login_required(login_url='/login/42')  # Redirect to login_42 if not logged in
 def calculator(request):
@@ -29,4 +32,4 @@ def calculator(request):
 
     context['owner_projects'] = owner_projects
     context['owner_cursus'] = owner_cursus
-    return render(request, 'calculator.html', context)
+    return render(request, 'calculator/calculator.html', context)

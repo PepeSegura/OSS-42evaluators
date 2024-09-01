@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 fetch_data/migrations/*
+!fetch_data/migrations/__init__.py
 # C extensions
 *.so
 dbcommands.txt

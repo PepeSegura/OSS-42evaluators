@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
 {% load custom_filters %}
-{% block content %}
 <h1> {{ login }} 's Projects </h1>
 {% csrf_token %}
 
@@ -64,5 +62,3 @@
         {% endif %}
     </ul>
 </div>
-
-{% endblock %}

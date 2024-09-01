@@ -3,8 +3,7 @@ from update_database.our_network_manager import updateTokenInfo, needToUpdate
 import sys, random, string, requests, time, threading
 from queue import Queue
 
-from django.contrib.auth import login
-from django.contrib.auth import logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
@@ -75,11 +74,6 @@ def login_42(request):
     )
     return redirect(authorize_url)
 
-def landing(request):
-    if request.user.is_authenticated:
-        return redirect('index')
-    return render(request, 'landing.html')
-
 
 # The callback function to handle the response
 def handle_user_info_response(request, user_info):
@@ -125,10 +119,10 @@ def auth_callback(request):
     session_key = request.session.session_key
     add_request_to_queue(user_info_url, headers, session_key)
 
-    return render(request, 'auth_callback.html')
+    return render(request, 'login/auth_callback.html')
+
 
 # Endpoint to poll the status of the login request
-
 def check_login_status(request):
     session_key = request.session.session_key
 
@@ -140,6 +134,10 @@ def check_login_status(request):
 
     return JsonResponse({'status': 'pending'})
 
+def landing(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    return render(request, 'login/landing.html')
 
 def logout_view(request):
     logout(request)

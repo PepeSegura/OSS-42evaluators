@@ -20,46 +20,6 @@ from fetch_data.forms import FavoriteUsersForm
 
 logger = logging.getLogger(__name__)
 
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
-# Create your views here.
-
-#UNUSED /leaderboard
-@login_required(login_url='/login/42')  # Redirect to login_42 if not logged in
-def leaderboard_view(request):
-    context = {}
-    items_per_page = 50
-    sort_by = request.GET.get('sort_by', '-cursus__level')
-    search_query = request.GET.get('search', '')
-    page = request.GET.get('page', '1')
-    if int(page) < 1:
-        page = '1'
-    show_piscine_students = request.GET.get('show_piscine_students', 'no')
-    if search_query:
-        users = OurUser.objects.all().filter(login__icontains=search_query)
-    else:
-        users = OurUser.objects.all().order_by(sort_by)
-
-    users = users.filter(cursus__cursus_id=9)
-    if not show_piscine_students or show_piscine_students == 'yes':
-        users = users.exclude(cursus__cursus_id=21)
-    else:
-        users = users.filter(cursus__cursus_id=21)
-
-    paginator = Paginator(users, items_per_page)
-    paginated_users = paginator.get_page(page)
-
-    offset = (int(page) - 1) * items_per_page
-    context['users'] = paginated_users
-    context['title'] = 'Main view'
-    context['show_piscine_students'] = show_piscine_students
-    context['page'] = page
-    context['search_query'] = search_query
-    context['sort_by'] = sort_by
-    context['sort_dir'] = '' if sort_by.startswith('-') else '-'
-    context['offset'] = offset
-    return render(request, 'test.html', context)
-
 #USED /cursus -> My Cursus
 @login_required(login_url='/login/42')  # Redirect to login_42 if not logged in
 def cursus(request):
@@ -84,7 +44,10 @@ def cursus(request):
     context['title'] = login + '\'s Cursus'
     context['cursus'] = paginated_cursus
     context['page'] = page
-    return render(request, 'cursus_view.html', context)
+    if 'HX-Request' in request.headers:
+        return render(request, 'cursus/cursus.html', context)
+    else:
+        return render(request, 'cursus/cursus_full.html', context)
 
 #USED /projects -> My Projects
 @login_required(login_url='/login/42')  # Redirect to login_42 if not logged in
@@ -110,7 +73,10 @@ def projects(request):
     context['projects'] = paginated_projects
     context['page'] = page
     context['offset'] = offset
-    return render(request, 'projects_view.html', context)
+    if 'HX-Request' in request.headers:
+        return render(request, 'projects/projects.html', context)
+    else:
+        return render(request, 'projects/projects_full.html', context)
 
 #USED /all-project -> Latest project
 @login_required(login_url='/login/42')  # Redirect to login_42 if not logged in
@@ -135,7 +101,10 @@ def allprojects(request):
     context['projects'] = paginated_projects
     context['page'] = page
     context['offset'] = offset
-    return render(request, 'projects_view.html', context)
+    if 'HX-Request' in request.headers:
+        return render(request, 'projects/projects.html', context)
+    else:
+        return render(request, 'projects/projects_full.html', context)
 
 
 #USED /peers -> Peers+
@@ -182,13 +151,14 @@ def peers(request):
                     else:
                         owner.favorite_users.remove(friend)
                 return redirect('peers')
-
         context['form'] = form
-
     except Exception as e:
         context['error_message'] = str(e)
 
-    return render(request, 'peers.html', context)
+    if 'HX-Request' in request.headers:
+        return render(request, 'peers/peers.html', context)
+    else:
+        return render(request, 'peers/peers_full.html', context)
 
 #IN PROGRESS /add
 @login_required(login_url='/login/42')  # Redirect to login_42 if not logged in
@@ -217,7 +187,7 @@ def add_friend(request):
 
 #USED /clusters -> Clusters
 @login_required(login_url='/login/42')  # Redirect to login_42 if not logged in
-def clusterMap(request):
+def cluster_view(request):
     developers = {"psegura-", "sacorder"}
     context = {}
     context['title'] = "42 Madrid's Clusters"
@@ -275,7 +245,10 @@ def clusterMap(request):
 
     # Add occupancy to context
     context['occupancy'] = [occupancy_c1, occupancy_c2, occupancy_c3]
-    return render(request, 'cluster_map.html', context)
+    if 'HX-Request' in request.headers:
+        return render(request, 'clusters/clusters.html', context)
+    else:
+        return render(request, 'clusters/clusters_full.html', context)
 
 
 #USED /index -> Students / 42 Madrid's Evaluators
@@ -333,5 +306,8 @@ def index(request):
     context['offset'] = offset
     context['piscines'] = Piscine.objects.all()
     context['selected_piscine'] = selected_piscine
-    return render(request, 'leaderboard.html', context)
+    if 'HX-Request' in request.headers:
+        return render(request, 'leaderboard/leaderboard.html', context)
+    else:
+        return render(request, 'leaderboard/leaderboard_full.html', context)
 
