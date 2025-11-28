@@ -84,10 +84,11 @@ def allprojects(request):
     items_per_page = 50
     context = {}
     page = request.GET.get('page', '1')
+    query = request.GET.get('search', '')
     if int(page) < 1:
         page = '1'
 
-    paginator = Paginator(Project.objects.all(), items_per_page)
+    paginator = Paginator(Project.objects.filter(name__icontains=query), items_per_page)
     paginated_projects = paginator.get_page(page)
 
     # Convert marked_at to datetime object
